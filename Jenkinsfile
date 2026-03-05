@@ -14,11 +14,18 @@ pipeline {
                 echo "Source code checked out successfully."
             }
         }
-        stage('Build') {
+        stage('Test') {
             steps {
-                // Build the Maven app providing the absolute path to mvn for Jenkins
-                echo "Building Java App..."
-                sh '/usr/local/bin/mvn clean package'
+                // Run Unit Tests
+                echo "Testing Java App..."
+                sh '/usr/local/bin/mvn clean test'
+            }
+        }
+        stage('Package') {
+            steps {
+                // Package the Maven app into a JAR file (skipping tests as they just ran)
+                echo "Packaging Java App..."
+                sh '/usr/local/bin/mvn package -DskipTests'
             }
         }
         stage('Archive Artifacts') {
