@@ -16,9 +16,9 @@ pipeline {
         }
         stage('Build') {
             steps {
-                // Build the Maven app
+                // Build the Maven app providing the absolute path to mvn for Jenkins
                 echo "Building Java App..."
-                sh 'mvn clean package'
+                sh '/usr/local/bin/mvn clean package'
             }
         }
         stage('Archive Artifacts') {
@@ -31,11 +31,11 @@ pipeline {
     }
     post {
         failure {
-            // Email notification on failure
-            echo "Pipeline failed, sending email..."
-            mail to: 'devops-team@example.com',
-                 subject: "Build Failed: ${currentBuild.fullDisplayName}",
-                 body: "Build failed for POC 1. Please check the logs at ${env.BUILD_URL}"
+            // Email notification on failure (Commented out for local POC as SMTP is not configured)
+            echo "Pipeline failed! (Skipping email as SMTP port 25 is not configured locally)"
+            // mail to: 'devops-team@example.com',
+            //      subject: "Build Failed: ${currentBuild.fullDisplayName}",
+            //      body: "Build failed for POC 1. Please check the logs at ${env.BUILD_URL}"
         }
         success {
             echo "Pipeline succeeded! Build Tag: ${BUILD_TAG}"
